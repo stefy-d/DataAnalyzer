@@ -1,7 +1,7 @@
 import os
 from multiprocessing import Process
 from producers import run_producers
-from consumers import run_consumers
+from consumers import start_consumer  
 
 files_folder = "processed_files"
 paths = []
@@ -12,16 +12,20 @@ for file_name in os.listdir(files_folder):
     paths.append(file_path)
     topics.append(file_name)
 
-# TODO: sa vad dc se poate altfel
+# pornesc procesul care mi porneste producerii
+p_producer = Process(target=run_producers, args=(paths, topics))
+p_producer.start()
 
-# pornesc cate un proces pt produceri/consumeri
-p1 = Process(target=run_producers, args=(paths, topics))
-p2 = Process(target=run_consumers, args=(topics,))
+# pentru consumeri fac cate un proces pentru fiecare 
+consumer_processes = []
+for topic in topics:
+    p = Process(target=start_consumer, args=(topic,))
+    p.start()
+    consumer_processes.append(p)
 
-p1.start()
-p2.start()
+p_producer.join()
 
-p1.join()
-p2.join()
+for p in consumer_processes:
+    p.join()
 
 print("Finished all.")
