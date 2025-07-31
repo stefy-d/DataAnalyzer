@@ -11,13 +11,16 @@ Curata datele:
 + folosesc mediana pentru a completa valorile nule
 
 ### *`run_prod_cons`*
-+ pornesc cate un proces pentru streamingul de date: producatori, consmatori
++ pornesc cate un proces pentru fiecare consumer si un proces care sa imi creeze producerii in threaduri
 
 ### *`producers`*
 + pornesc cate un thread pentru fiecare fisier in care deschid cate un producer care sa faca streaming, fiecare pe un topic specific
 + impart fisierul in batch-uri, cate 50 de linii
 
 ### *`consumers`*
-+ pornesc cate un thread in care deschid cate un consumer care sa faca poll fiecare pe cate un topic
-+ consumerii primesc date si mai departe trebuie sa inceapa analiza in Spark: DBD
-+ cand un consumer nu mai primeste nimic 10s, se inchide consumerul
++ am cate un proces pt fiecare consumer ca sa pot sa deschid cate o sesiune spark care sa mi analizeze datele
+
+<br>
+
+      Nu am reusit sa folosesc spark streaming pt ca nu am putut sa leg sesiunea spark de docker ul in care am consumerii si producerii asa ca fac cate o sesiune in fiecare             consumer ca sa poata accesa datele.
+      Problema urmatoaare va fi cum voi retine rezultatele in acelasi loc si cum pot sa fac o statistica overall or smth. <3
