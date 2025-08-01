@@ -20,6 +20,10 @@ Curata datele:
 ### *`consumers`*
 + am cate un proces pt fiecare consumer ca sa pot sa deschid cate o sesiune spark care sa mi analizeze datele
 
+### *`schema`*
++ am construit pentru fiecare fisier schema ca sa pot pune datele in df si sa le analizez in consumer pe masura ce primesc batchurile
+
+
 <br>
 
       Nu am reusit sa folosesc spark streaming pt ca nu am putut sa leg sesiunea spark de docker ul in care am consumerii si producerii asa ca fac cate o sesiune in fiecare             consumer ca sa poata accesa datele.
