@@ -19,6 +19,7 @@ Curata datele:
 
 ### *`consumers`*
 + am cate un proces pt fiecare consumer ca sa pot sa deschid cate o sesiune spark care sa mi analizeze datele
++ am facut sa pun datele primite in df 
 
 ### *`schema`*
 + am construit pentru fiecare fisier schema ca sa pot pune datele in df si sa le analizez in consumer pe masura ce primesc batchurile
