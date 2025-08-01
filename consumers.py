@@ -3,6 +3,9 @@ from pyspark.sql import SparkSession
 import os
 from io import StringIO
 
+from schema import schema_dispatcher
+    
+
 def start_consumer(topic):
     print(f"Start consumer {topic}")
 
@@ -11,6 +14,11 @@ def start_consumer(topic):
         .appName(f"KafkaStreamingAnalysis_{topic}") \
         .config("spark.driver.bindAddress", "127.0.0.1") \
         .getOrCreate()
+    
+    schema = schema_dispatcher.get(topic)
+    df_total = spark.createDataFrame([], schema)
+
+    #df_total.printSchema()
 
     consumer = Consumer({
         'bootstrap.servers': 'localhost:9092',
@@ -38,12 +46,29 @@ def start_consumer(topic):
                 raise KafkaException(msg.error())
 
             raw = msg.value().decode('utf-8')
+            
+            #print(raw)
             if not raw.strip():
                 continue
 
+            lines = raw.strip().split("\n")
+
+            # TODO: sa ma uit cum se constr aici asta
+            rdd = spark.sparkContext.parallelize(lines)
+
+            df_batch = spark.read \
+                .schema(schema) \
+                .option("header", "false") \
+                .csv(rdd)
+
+            #df_batch.show()
            
+            df_total = df_total.unionByName(df_batch)
 
     except KeyboardInterrupt:
         print(f"[{topic}] Stopping...")
     finally:
         consumer.close()
+        df_total.show(25)
+        spark.stop()
+
