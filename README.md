@@ -24,6 +24,9 @@ Curata datele:
 ### *`schema`*
 + am construit pentru fiecare fisier schema ca sa pot pune datele in df si sa le analizez in consumer pe masura ce primesc batchurile
 
+### *`analyze`*
++ aici voi avea functiile care analizeaza df fiecarui dataset
+
 
 <br>
 
