@@ -4,6 +4,7 @@ import os
 from io import StringIO
 
 from schema import schema_dispatcher
+from analyze import function_dispatcher
     
 
 def start_consumer(topic):
@@ -17,6 +18,8 @@ def start_consumer(topic):
     
     schema = schema_dispatcher.get(topic)
     df_total = spark.createDataFrame([], schema)
+
+    func = function_dispatcher.get(topic)
 
     #df_total.printSchema()
 
