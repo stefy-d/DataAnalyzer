@@ -14,6 +14,7 @@ def start_consumer(topic):
     spark = SparkSession.builder \
         .appName(f"KafkaStreamingAnalysis_{topic}") \
         .config("spark.driver.bindAddress", "127.0.0.1") \
+        .config("spark.jars.packages", "org.elasticsearch:elasticsearch-hadoop:7.17.10") \
         .getOrCreate()
     
     schema = schema_dispatcher.get(topic)
@@ -68,10 +69,12 @@ def start_consumer(topic):
            
             df_total = df_total.unionByName(df_batch)
 
+            func(df_total)
+
     except KeyboardInterrupt:
         print(f"[{topic}] Stopping...")
     finally:
         consumer.close()
-        df_total.show(25)
+        #df_total.show(25)
         spark.stop()
 
